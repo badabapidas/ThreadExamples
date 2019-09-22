@@ -23,6 +23,11 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:26.0-jre'
+	
+	testCompile group: 'com.sun.net.httpserver', name: 'http', version: '20070405'
+	
+	api 'org.openjfx:javafx-controls:11.0.2'
+	api 'org.openjfx:javafx-fxml:11.0.2'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

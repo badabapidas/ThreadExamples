@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Hanckers {
+public class Hackers {
 	public static final int MAX_PASSWORD = 9999;
 
 	public static void main(String[] args) {
