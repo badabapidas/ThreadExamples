@@ -1,0 +1,57 @@
+Java multiple threads
+
+Thread is to run any program in a different process. So multi thread is nothing but running a number of threads at once. So the best performance of multi thread depends on the no of threads you are creating, so in ideal case it should be the no of your machine core. If you define thread no more than that the main and virtual core of your OS then the performance wont change much after it will achieve the best the core you defined.
+
+Example. Mahine has main core of 4 and with virtual core 8. and you defined thread 12; so upto 4 it will get the best then upto 8 it will get a lil better. But after 8 there wont be much difference in the performances as all the threads have to wait till the other threads r free.
+
+
+Long running thread can be interrupt using thread.interrupt(); but your thread impl class has to be impleted to handle the interrupt call wih Thread.currentThread().isInterrupted()
+One way to terminate gracefully the long running thread by calling daemon thread interrupt then the impl don`t have to handle the thread interrupt;
+
+Thread.join() - to get the data from one thread.  
+
+We can create fixed no of thread pool using Executor executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS); So in a situation where you have to create dynamic no of threads based on your program logic then creating everytime a new thread is costly. SO in that case you can use thread pool with a defined no of pool. So for say you defined the pool to 5. So more than that any thread have to wait and once usind thread are dont then waiting threads can use those without creating new threads. Those threads are once create and use everytime.
+
+Concureency problem: Concurrency problem is one or more thread is trying to share the same object at same time and it leads to problem; Say In a usecase we are trying to purchase 1000 items and then sell 1000 items in 2 separate threads and the result we are expecting here is 0; but due to concurrency problem you will get unexpected result in every runs
+
+Sol: So the concurrency prob can be solved using synchronized block; or any lock object in the synchronized block;and volatile for double variable. all the other promitive is but default thread safe; Data race also can be handle with volatile for primitive data types
+
+Object lock = new Object();
+
+public void increment() {
+	synchronized (this.lock) {
+		...
+	}
+}
+
+ReentrantLock: SO with the above approach you can only define the lock object in a sync block; and once sync block ends the lock will release; so there is nothing more that user can control. With ReentrantLock user can define when to lock when to unlock. 
+
+Lock lockObject = new ReentrantLock();
+
+lockObject.lock(); // to get the lock access
+lockObject.unlock(); // to release the lock
+lockObject.tryLock(); // will return if the lock is access by other thread
+
+so the main diff between lock and tryLock is, suppose for lock if a thread is already using the shared resources others thread have to wait until this thread done but for tryLock as it will return boolean based on that user can perform other tasks if that lock is blocked. So this will make the app more responsive; See the example ReentrantLockExample; So in the animatortimer if we replace pricesContainer.getLockObject().tryLock() by pricesContainer.getLockObject().lock() the app will be not responding.
+
+ReentrantReadWriteLock: Say for scneario where one writer thread will keep on writing in a d and there can be many reader thread to read data from data bases; In that case define lock object can slow down the process; as readers threads wont change any data so handling reader threads can be different rather than writer threads. So ReentrantReadWriteLock gives you more control over read and write lock to handle these kind of situations; See ReadWriteLockExample for better understanding.
+
+
+ATOMIC 
+
+A small toolkit of classes that support lock-free thread-safe programming on single variables. Instances of Atomic classes maintain values that are accessed and updated using methods otherwise available for fields using associated atomic VarHandle operations.
+
+It is very useful in those usecases where we need to thread safe some of out complex operations using in primitive data types with a synchrous block. Atomic remove the needs of synchronized block.
+
+Usage of Atomic can increase the performace 200%; In a standard push/pop operations we use synchronized. so if you run 4 threads all ave to go one by one to execute those sync blocks that can reduce the performace; As atomic is thread safe and lock free it can increase the perfomance like anything; see the program AtomicIntegerExample and AtomicReferenceExample for more refs
+
+
+
+
+
+
+
+
+
+
+
